@@ -1,9 +1,10 @@
 'use client';
 
 // import ReviewerRanking from './ReviewerRanking';
-// import MobileCategorySheet from './MobileCategorySheet';
+import MobileCategorySheet from './home/MobileCategorySheet';
 import ProductGrid from '@/components/common/ProductGrid';
 import { useState } from 'react';
+import CategoryList from './home/CategoryList';
 
 const products = [
   {
@@ -124,35 +125,26 @@ const Home = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
   return (
-    <main className='flex items-center justify-center m-5'>
+    <main className='flex m-5'>
       {/* pc버전에서는 그냥 메뉴 */}
       <aside className='hidden md:flex flex-col p-2.5 md:pt-[45px] gap-1 w-45 lg:w-55'>
         <div className='px-5 py-[15px] text-[#F1F1F5] md:text-sm lg:text-base'>카테고리</div>
-        {categories.map((category) => {
-          const isSelected = category.id === selectedCategoryId;
-          return (
-            <button
-              key={category.id}
-              onClick={() =>
-                setSelectedCategoryId(selectedCategoryId === category.id ? null : category.id)
-              }
-              className={`text-left whitespace-nowrap px-5 py-[15px] rounded-xl text-sm lg:text-base
-                ${isSelected ? 'text-[#F1F1F5] bg-[#252530]' : 'text-[#6E6E82]'}`}
-            >
-              {category.name}
-            </button>
-          );
-        })}
+        <CategoryList
+          categories={categories}
+          selectedId={selectedCategoryId}
+          onSelect={setSelectedCategoryId}
+        />
       </aside>
 
-      {/* 그 머냐 버튼 누르면 메뉴창 나오게 하는거 */}
-      {/* <div className='md:hidden'>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>안녕</button>
-      </div> */}
       {/* 위에서 분부하신 메뉴창 */}
-      {/* <aside className='flex md:hidden'>
-        <MobileCategorySheet onSelect={setSelectedCategoryId} />
-      </aside> */}
+      <aside className='md:hidden'>
+        <MobileCategorySheet
+          categories={categories}
+          selectedId={selectedCategoryId}
+          onSelect={setSelectedCategoryId}
+        />
+      </aside>
+
       {/* 태블릿/모바일 버전: 가로 스크롤 */}
       {/* <div className='flex lg:hidden overflow-x-auto space-x-4 scrollbar-hide'>
         {reviewers.map((review) => (
@@ -160,7 +152,7 @@ const Home = () => {
         ))}
       </div> */}
       <section className='flex flex-col justify-center mx-auto grow-1'>
-        <ProductGrid title='가장 핫한 상품 TOP 6' products={products} />
+        <ProductGrid title='지금 핫한 상품' products={products} />
       </section>
       {/* PC 버전: grid */}
       {/* <div className='hidden lg:grid flex-col gap-4'>
