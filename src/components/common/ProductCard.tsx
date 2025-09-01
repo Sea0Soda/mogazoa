@@ -18,7 +18,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       {/* 텍스트 영역 */}
       <div className='flex flex-col gap-[5px] flex-1'>
-        <div className='text-[#F1F1F5] text-sm font-medium'>{name}</div>
+        <div className='text-[#F1F1F5] text-sm md:text-base lg:text-lg font-medium'>{name}</div>
 
         <div className='inline-flex gap-2.5'>
           <div className='flex gap-[5px]'>
