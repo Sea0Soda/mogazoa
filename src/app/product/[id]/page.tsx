@@ -26,7 +26,6 @@ export default function Product() {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button
-            variant='outline'
             onClick={() => {
               setIsOpen(true);
             }}
