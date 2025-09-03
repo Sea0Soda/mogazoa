@@ -1,0 +1,51 @@
+import { Product } from '../types/Product';
+export const allProducts: Product[] = [
+  {
+    id: 1,
+    name: '다이슨 슈퍼소닉 블루',
+    image: 'https://placehold.co/150x150/DBEAFE/1E3A8A?text=Dyson',
+    reviewCount: 120,
+    rating: 4.8,
+    favoriteCount: 50,
+  },
+  {
+    id: 2,
+    name: 'Apple Watch 7',
+    image: 'https://placehold.co/150x150/E0E0E0/333333?text=Apple',
+    reviewCount: 98,
+    rating: 4.6,
+    favoriteCount: 213,
+  },
+  {
+    id: 3,
+    name: '헤라 블랙쿠션',
+    image: 'https://placehold.co/150x150/252525/FFFFFF?text=Hera',
+    reviewCount: 250,
+    rating: 4.9,
+    favoriteCount: 800,
+  },
+  {
+    id: 4,
+    name: '우스티드 울 폴로 셔츠',
+    image: 'https://placehold.co/150x150/D1D5DB/1F2937?text=Usted',
+    reviewCount: 150,
+    rating: 4.9,
+    favoriteCount: 234,
+  },
+  {
+    id: 5,
+    name: '돌화분',
+    image: 'https://placehold.co/150x150/A3A3A3/FFFFFF?text=StonePot',
+    reviewCount: 60,
+    rating: 4.4,
+    favoriteCount: 120,
+  },
+  {
+    id: 6,
+    name: '아디다스 퍼피렛 코어 블랙',
+    image: 'https://placehold.co/150x150/171717/FFFFFF?text=Adidas',
+    reviewCount: 300,
+    rating: 4.7,
+    favoriteCount: 550,
+  },
+];
