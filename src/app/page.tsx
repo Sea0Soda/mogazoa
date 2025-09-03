@@ -220,7 +220,7 @@ const Home = () => {
         <div className='flex flex-col justify-center flex-1'>
           <ProductGrid title='지금 핫한 상품' products={products} />
         </div>
-        {/* PC 버전: grid */}/
+        {/* PC 버전: grid */}
         <div className='hidden lg:grid grid-cols-1 gap-4 '>
           <ReviewerRanking reviewers={reviewers} />
         </div>
