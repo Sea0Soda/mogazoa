@@ -13,7 +13,7 @@ import Image from 'next/image';
 import ProductCard from '@/components/common/ProductCard';
 import { useAuthStore } from '@/lib/stores/authStore';
 
-export default function UserProfilePage() {
+const UserProfilePage = () => {
   const params = useParams();
   const userId = params.userId as string;
   const { user } = useAuthStore();
@@ -313,4 +313,6 @@ export default function UserProfilePage() {
       )}
     </div>
   );
-}
+};
+
+export default UserProfilePage;
