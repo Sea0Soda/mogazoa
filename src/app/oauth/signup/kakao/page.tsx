@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/button';
 
-export default function KakaoSignupCallbackPage() {
+function KakaoSignupCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [nickname, setNickname] = useState('');
@@ -91,5 +91,13 @@ export default function KakaoSignupCallbackPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function KakaoSignupCallbackPage() {
+  return (
+    <Suspense fallback={<div>로딩 중...</div>}>
+      <KakaoSignupCallback />
+    </Suspense>
   );
 }
