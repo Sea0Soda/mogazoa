@@ -7,11 +7,6 @@ import DesktopView from './components/DesktopView';
 export default function ComparisonPage() {
   return (
     <div className='w-full min-h-screen font-sans bg-gray-900 text-white'>
-      {/* --- 헤더 --- */}
-      <header className='h-16 w-full sticky top-0 bg-gray-900/80 backdrop-blur-sm border-b border-gray-700 flex items-center justify-center text-sm text-gray-400 z-10'>
-        (Header가 들어올 영역)
-      </header>
-
       {/* --- 메인 콘텐츠 --- */}
       <main className='w-full max-w-md md:max-w-5xl lg:max-w-7xl mx-auto pt-12 pb-40 px-4'>
         <h1 className='text-3xl md:text-4xl font-bold text-center text-gray-200 mb-10'>
