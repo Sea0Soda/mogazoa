@@ -10,29 +10,29 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const { name, reviewCount, rating, favoriteCount } = product;
 
   return (
-    <div className='flex flex-col w-full h-[183px] md:h-[256px] lg:h-[308px] max-w-[300px] max-h-[308px] rounded-xl p-3 md:p-4 lg:p-5 font-sans bg-[#21212A]'>
-      <div className='mb-2 md:mb-4 overflow-hidden'>
-        <Image
-          src={rilakkuma}
-          alt={name}
-          width={284}
-          height={200}
-          className='w-full h-auto object-cover rounded-xl'
-        />
+    <div className='p-2.5 md:pb-[20px] bg-zinc-800 rounded-lg flex flex-col '>
+      {/* 이미지 영역: 카드 폭에 맞춰 반응형, 비율 140:98 유지 */}
+      <div className='w-full aspect-[140/98] mb-[10px] relative'>
+        <Image src={rilakkuma} alt={name} fill className='object-cover rounded-xl' />
       </div>
 
-      <div className='flex flex-col justify-end grow'>
-        <h2 className='text-[#F1F1F5] text-sm md:text-base lg:text-lg font-bold mb-2'>{name}</h2>
+      {/* 텍스트 영역 */}
+      <div className='flex flex-col gap-[5px] flex-1'>
+        <div className='text-[#F1F1F5] text-sm md:text-base lg:text-lg font-medium'>{name}</div>
 
-        <div className='flex justify-between items-center text-xs md:text-sm text-[#6E6E82]'>
-          <div>
-            <span>리뷰 {reviewCount}</span>
-            <span className='ml-2'>찜 {favoriteCount}</span>
+        <div className='inline-flex gap-2.5'>
+          <div className='flex gap-[5px]'>
+            <div className='text-[#6E6E82] text-xs font-light'>후기</div>
+            <div className='text-[#6E6E82] text-xs font-light'>{reviewCount}</div>
           </div>
+          <div className='flex gap-[5px]'>
+            <div className='text-[#6E6E82] text-xs font-light'>찜</div>
+            <div className='text-[#6E6E82] text-xs font-light'>{favoriteCount}</div>
+          </div>
+        </div>
 
-          <div className='flex items-center'>
-            <span className='font-semibold ml-1'>⭐️ {rating}</span>
-          </div>
+        <div className='inline-flex items-center gap-0.5'>
+          <div className='text-gray-400 text-xs font-light'>⭐️ {rating}</div>
         </div>
       </div>
     </div>
