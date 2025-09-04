@@ -20,7 +20,7 @@ export const ProductResultCard: React.FC<{
             alt='캐릭터 아이콘'
             fill
             style={{ objectFit: 'contain', padding: '1rem' }}
-          />{' '}
+          />
         </div>
         <p className='font-semibold text-gray-400 text-sm mt-2'>{label}</p>
       </div>

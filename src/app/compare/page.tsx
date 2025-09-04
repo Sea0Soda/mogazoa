@@ -1,48 +1,26 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Product, ProductState, ComparisonResult } from '@/types/Product';
 import { MobileView } from './views/MobileView';
 import { TabletAndDesktopView } from './views/TabletAndDesktopView';
 
 export default function ComparisonPage() {
-  const [productA, setProductA] = useState<ProductState>({
-    imagePreview: null,
-    selectedProduct: null,
-  });
-  const [productB, setProductB] = useState<ProductState>({
-    imagePreview: null,
-    selectedProduct: null,
-  });
+  const [productA, setProductA] = useState<ProductState>({ selectedProduct: null });
+  const [productB, setProductB] = useState<ProductState>({ selectedProduct: null });
   const [comparisonResult, setComparisonResult] = useState<ComparisonResult | null>(null);
 
   useEffect(() => {
     const savedA = localStorage.getItem('productA');
-    if (savedA) setProductA(JSON.parse(savedA));
+    if (savedA) {
+      const parsed = JSON.parse(savedA);
+      setProductA({ selectedProduct: parsed.selectedProduct || null });
+    }
     const savedB = localStorage.getItem('productB');
-    if (savedB) setProductB(JSON.parse(savedB));
+    if (savedB) {
+      const parsed = JSON.parse(savedB);
+      setProductB({ selectedProduct: parsed.selectedProduct || null });
+    }
   }, []);
-
-  const handleImageChange = (productLetter: 'A' | 'B', file: File) => {
-    const newImageUrl = URL.createObjectURL(file);
-    const setter = productLetter === 'A' ? setProductA : setProductB;
-    setter((prevState) => {
-      if (prevState.imagePreview) URL.revokeObjectURL(prevState.imagePreview);
-      const newState = { ...prevState, imagePreview: newImageUrl };
-      localStorage.setItem(`product${productLetter}`, JSON.stringify(newState));
-      return newState;
-    });
-  };
-
-  const handleClearImage = (productLetter: 'A' | 'B') => {
-    const setter = productLetter === 'A' ? setProductA : setProductB;
-    setter((prevState) => {
-      if (prevState.imagePreview) URL.revokeObjectURL(prevState.imagePreview);
-      const newState = { ...prevState, imagePreview: null };
-      localStorage.setItem(`product${productLetter}`, JSON.stringify(newState));
-      return newState;
-    });
-  };
 
   const handleProductSelect = (productLetter: 'A' | 'B', product: Product | null) => {
     setComparisonResult(null);
@@ -116,14 +94,7 @@ export default function ComparisonPage() {
     return '둘 다 좋은 선택이에요!';
   };
 
-  const viewProps = {
-    productA,
-    productB,
-    comparisonResult,
-    handleImageChange,
-    handleClearImage,
-    handleProductSelect,
-  };
+  const viewProps = { productA, productB, comparisonResult, handleProductSelect };
 
   return (
     <div className='w-full min-h-screen font-sans bg-gray-900 text-white'>
