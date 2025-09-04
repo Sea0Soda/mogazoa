@@ -40,8 +40,8 @@ const ReviewerRanking = () => {
     <div className='flex flex-col gap-4 lg:justify-center'>
       <h2 className='text-[#F1F1F5] text-sm lg:text-base lg:font-normal shrink-0'>리뷰어 랭킹</h2>
       <div className='flex lg:flex-col gap-[20px] lg:gap-[30px]'>
-        {reviewers.map((reviewer) => (
-          <ReviewerCard key={reviewer.id} {...reviewer} />
+        {reviewers.slice(0, 5).map((reviewer, index) => (
+          <ReviewerCard key={reviewer.id} rank={index + 1} {...reviewer} />
         ))}
       </div>
     </div>
