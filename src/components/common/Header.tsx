@@ -115,7 +115,7 @@ const Header = ({ className, ...props }: HeaderProps) => {
           {isSearchOpen ? (
             <div className='flex w-full items-center gap-4'>
               <button onClick={() => setIsSearchOpen(false)}>
-                <Image src={menuSvg} alt='메뉴 닫기' width={24} height={24} />
+                <Image src={menuSvg} alt='메뉴닫기' width={24} height={24} />
               </button>
               <div className='relative flex-1'>
                 <input
@@ -138,13 +138,13 @@ const Header = ({ className, ...props }: HeaderProps) => {
           ) : (
             <>
               <button>
-                <Image src={menuSvg} alt='메뉴 열기' width={24} height={24} />
+                <Image src={menuSvg} alt='메뉴열기' width={24} height={24} />
               </button>
               <Link href='/'>
-                <Image src={logoSvg} alt='Mogazoa Logo' width={112} height={28} priority />
+                <Image src={logoSvg} alt='MogazoaLogo' width={112} height={28} priority />
               </Link>
               <button onClick={() => setIsSearchOpen(true)}>
-                <Image src={searchSvg} alt='검색 열기' width={24} height={24} />
+                <Image src={searchSvg} alt='검색열기' width={24} height={24} />
               </button>
             </>
           )}
@@ -154,7 +154,7 @@ const Header = ({ className, ...props }: HeaderProps) => {
         <div className='hidden w-full items-center justify-between md:flex'>
           <div className='flex-shrink-0'>
             <Link href='/'>
-              <Image src={logoSvg} alt='Mogazoa Logo' width={128} height={32} priority />
+              <Image src={logoSvg} alt='MogazoaLogo' width={128} height={32} priority />
             </Link>
           </div>
           <div className='flex items-center gap-6'>
