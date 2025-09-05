@@ -353,6 +353,7 @@ const UserProfilePage = () => {
                           rating: product.rating,
                           reviewCount: product.reviewCount,
                           favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
                         }}
                       />
                     ))}
@@ -411,6 +412,7 @@ const UserProfilePage = () => {
                           rating: product.rating,
                           reviewCount: product.reviewCount,
                           favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
                         }}
                       />
                     ))}
@@ -469,6 +471,7 @@ const UserProfilePage = () => {
                           rating: product.rating,
                           reviewCount: product.reviewCount,
                           favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
                         }}
                       />
                     ))}
