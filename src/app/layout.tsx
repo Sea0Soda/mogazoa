@@ -1,4 +1,5 @@
 import './globals.css';
+import Header from '@/components/common/Header';
 
 export default function RootLayout({
   children,
@@ -7,7 +8,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body className='bg-gray-800'>{children}</body>
+      <body className='bg-gray-800'>
+        <Header />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
