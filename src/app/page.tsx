@@ -89,7 +89,7 @@ const Home = () => {
     : products;
 
   return (
-    <main className='flex m-5'>
+    <main className='flex justify-between mt-5 gap-[30px]'>
       {/* PC/tablet 카테고리 */}
       <aside className='hidden md:flex flex-col p-2.5 md:pt-[45px] gap-1 w-45 lg:w-55'>
         <CategoryList
@@ -108,14 +108,14 @@ const Home = () => {
         />
       </aside>
 
-      <section className='flex flex-col lg:flex-row flex-1 min-w-0'>
+      <section className='flex flex-col lg:flex-row flex-1 min-w-0 '>
         {/* [리뷰어 랭킹] Tablet/Mobile : Row-sroll */}
         <div className='grid grid-cols-2 lg:hidden overflow-x-auto space-x-4 mb-[60px]'>
           <ReviewerRanking />
         </div>
 
         {/* [상품 그리드]: 중앙정렬 제거, 남은 폭 사용 */}
-        <div className='flex flex-col flex-1 min-w-0'>
+        <div className='flex flex-col flex-1 min-w-0 lg:max-w-5xl'>
           <ProductGrid
             title={
               selectedCategoryId
