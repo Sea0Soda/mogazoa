@@ -1,11 +1,21 @@
 import Image from 'next/image';
 import rilakkuma from '@/components/common/리락쿠마.jpg';
-import { Reviewer } from '@/types/Reviewer';
+import { UserRanking } from '@/types/UserRanking';
+
+interface ReviewerCardProps extends UserRanking {
+  rank: number;
+}
 
 // 단일 리뷰어 카드
-const ReviewerCard = ({ nickname, reviewCount, followersCount }: Reviewer) => {
+const ReviewerCard = ({ nickname, reviewCount, followersCount, rank }: ReviewerCardProps) => {
+  const getRankStyle = () => {
+    if (rank === 1) return 'text-[#FF2F9F]';
+    if (rank === 2) return 'text-[#05D58B]';
+    if (rank >= 3) return 'text-[#9FA6B2]';
+  };
+
   return (
-    <div className='h-9 flex gap-2.5'>
+    <div className='h-9 flex gap-2.5 shrink-0'>
       {/* 프로필 이미지 */}
       <div className='relative w-9 h-9 aspect-square'>
         <div className='absolute inset-0 bg-zinc-300 rounded-full' />
@@ -16,9 +26,9 @@ const ReviewerCard = ({ nickname, reviewCount, followersCount }: Reviewer) => {
       <div className='flex flex-col gap-[5px]'>
         <div className='flex gap-[5px] items-center'>
           <div className='px-1.5 py-0.5 bg-pink-500/10 rounded-[50px] overflow-hidden'>
-            <div className='text-center text-pink-500 text-[10px] font-normal'>1등</div>
+            <div className={`text-center text-[10px] ${getRankStyle()} font-normal`}>{rank}등</div>
           </div>
-          <div className='text-[#F1F1F5] text-sm font-normal'>{nickname}</div>
+          <div className='text-[#F1F1F5] text-sm lg:text-base font-normal'>{nickname}</div>
         </div>
 
         <div className='flex flex-row gap-2.5'>
