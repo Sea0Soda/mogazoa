@@ -5,19 +5,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 import { useAuthStore } from '@/lib/stores/authStore';
 
-import logoSvg from '@/assets/icons/logo.svg';
-import menuSvg from '@/assets/icons/menu.svg';
-import searchSvg from '@/assets/icons/search.svg';
+import logoSvg from '../../assets/icons/logo.svg';
+import menuSvg from '../../assets/icons/menu.svg';
+import searchSvg from '../../assets/icons/search.svg';
 
 // --- 스타일 정의 (cva) ---
 const headerVariants = cva('w-full relative z-50 transition-all duration-300 ease-in-out', {
   variants: {
     variant: {
       home: 'bg-transparent',
-      default: 'bg-gray-800',
+      default: 'bg-gray-900',
     },
   },
   defaultVariants: {
@@ -44,8 +44,7 @@ export interface HeaderProps
 const Header = ({ className, ...props }: HeaderProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { isLoggedIn, login, logout } = useAuthStore();
-
+  const { isLoggedIn } = useAuthStore();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isMounted, setIsMounted] = useState(false);
@@ -93,18 +92,6 @@ const Header = ({ className, ...props }: HeaderProps) => {
       </>
     );
 
-  const handleDevLogin = () => {
-    if (isLoggedIn) {
-      logout();
-    } else {
-      login({
-        id: 'dev-user-123',
-        email: 'dev@mogazoa.com',
-        nickname: '개발용유저',
-      });
-    }
-  };
-
   if (!isMounted) {
     return null;
   }
@@ -121,6 +108,9 @@ const Header = ({ className, ...props }: HeaderProps) => {
               </button>
               <div className='relative flex-1 rounded-full p-[0.5px] bg-transparent focus-within:bg-gradient-to-r from-[#5097FA] to-[#5363FF]'>
                 <div className='relative'>
+                  <div className='absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none'>
+                    <Image src={searchSvg} alt='검색 아이콘' width={20} height={20} />
+                  </div>
                   <input
                     type='text'
                     value={searchValue}
@@ -128,14 +118,8 @@ const Header = ({ className, ...props }: HeaderProps) => {
                     onKeyDown={handleKeyDown}
                     placeholder='상품 이름을 검색해 보세요'
                     autoFocus
-                    className='w-full h-11 rounded-full bg-[#2E2E3A] pl-4 pr-10 text-sm text-white focus:outline-none'
+                    className='w-full h-11 rounded-full bg-[#2E2E3A] pl-11 pr-4 text-sm text-white focus:outline-none'
                   />
-                  <button
-                    onClick={handleSearch}
-                    className='absolute right-3 top-1/2 -translate-y-1/2'
-                  >
-                    <Image src={searchSvg} alt='검색' width={20} height={20} />
-                  </button>
                 </div>
               </div>
             </div>
@@ -167,7 +151,7 @@ const Header = ({ className, ...props }: HeaderProps) => {
             </Link>
           </div>
           <div className='flex items-center gap-6'>
-            <div className='relative w-full max-w-md rounded-full p-[0.5px] bg-[#3A4A4A] transition-all focus-within:bg-gradient-to-r from-[#5097FA] to-[#5363FF]'>
+            <div className='relative w-full max-w-md rounded-full p-px transition-all focus-within:bg-gradient-to-r from-[#5097FA] to-[#5363FF]'>
               <div className='relative'>
                 <div className='absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none'>
                   <Image src={searchSvg} alt='검색 아이콘' width={20} height={20} />
@@ -190,21 +174,13 @@ const Header = ({ className, ...props }: HeaderProps) => {
       </div>
 
       {isMenuOpen && (
-        <div className='absolute left-4 top-full w-40 rounded-lg bg-[#2E2E3A] p-4 shadow-lg md:hidden'>
+        <div className='absolute left-4 top-full mt-2 w-40 rounded-lg bg-[#2E2E3A] p-4 shadow-lg md:hidden'>
           <nav className='flex flex-col gap-4 text-white'>
             <MenuLinks />
           </nav>
         </div>
       )}
-
-      <div className='absolute top-2 right-4'>
-        <button
-          onClick={handleDevLogin}
-          className='text-xs text-yellow-300 bg-black/50 px-2 py-1 rounded'
-        >
-          {isLoggedIn ? 'Logout' : 'Login'} (Dev)
-        </button>
-      </div>
+      <div className='absolute bottom-0 left-0 w-full h-px bg-white/10' />
     </header>
   );
 };
