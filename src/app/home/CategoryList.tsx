@@ -14,6 +14,9 @@ interface CategoryListProps {
 const CategoryList = ({ categories, selectedId, onSelect }: CategoryListProps) => {
   return (
     <>
+      <div className='px-5 py-[15px] text-[#F1F1F5] md:text-sm lg:text-base text-center'>
+        카테고리
+      </div>
       {categories.map((category) => {
         const isSelected = category.id === selectedId;
         return (

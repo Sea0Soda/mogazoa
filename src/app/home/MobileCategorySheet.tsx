@@ -11,11 +11,13 @@ interface MobileCategorySheetProps {
 
 const MobileCategorySheet = ({ categories, selectedId, onSelect }: MobileCategorySheetProps) => {
   return (
-    <Sheet>
-      <SheetContent side='left' className='p-4'>
-        <CategoryList categories={categories} selectedId={selectedId} onSelect={onSelect} />
-      </SheetContent>
-    </Sheet>
+    <>
+      <Sheet>
+        <SheetContent side='left' className='p-4'>
+          <CategoryList categories={categories} selectedId={selectedId} onSelect={onSelect} />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
 
