@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-function KakaoSignup() {
+const KakaoSignup = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [nickname, setNickname] = useState('');
@@ -90,12 +90,14 @@ function KakaoSignup() {
       </div>
     </div>
   );
-}
+};
 
-export default function KakaoSignupPage() {
+const KakaoSignupPage = () => {
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
       <KakaoSignup />
     </Suspense>
   );
-}
+};
+
+export default KakaoSignupPage;

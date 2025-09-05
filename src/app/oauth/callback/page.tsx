@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 
-function OAuthCallback() {
+const OAuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuthStore();
@@ -145,12 +145,14 @@ function OAuthCallback() {
   }
 
   return null;
-}
+};
 
-export default function OAuthCallbackPage() {
+const OAuthCallbackPage = () => {
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
       <OAuthCallback />
     </Suspense>
   );
-}
+};
+
+export default OAuthCallbackPage;

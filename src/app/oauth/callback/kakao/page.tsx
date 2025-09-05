@@ -3,7 +3,7 @@
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-function KakaoCallback() {
+const KakaoCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,12 +30,14 @@ function KakaoCallback() {
       </div>
     </div>
   );
-}
+};
 
-export default function KakaoCallbackPage() {
+const KakaoCallbackPage = () => {
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
       <KakaoCallback />
     </Suspense>
   );
-}
+};
+
+export default KakaoCallbackPage;

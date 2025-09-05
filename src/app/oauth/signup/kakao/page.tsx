@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/button';
 
-function KakaoSignupCallback() {
+const KakaoSignupCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [nickname, setNickname] = useState('');
@@ -92,12 +92,14 @@ function KakaoSignupCallback() {
       </div>
     </div>
   );
-}
+};
 
-export default function KakaoSignupCallbackPage() {
+const KakaoSignupCallbackPage = () => {
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
       <KakaoSignupCallback />
     </Suspense>
   );
-}
+};
+
+export default KakaoSignupCallbackPage;
