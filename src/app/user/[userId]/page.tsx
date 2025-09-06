@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getUserProfile, UserDetail, followUser, unfollowUser } from '@/lib/user/userApi';
 import {
   getUserReviewedProducts,
@@ -12,6 +12,9 @@ import {
 import Image from 'next/image';
 import ProductCard from '@/components/common/ProductCard';
 import { useAuthStore } from '@/lib/stores/authStore';
+import FollowModal from '@/components/user/FollowModal';
+import NoProfileIcon from '@/assets/images/no_profile.svg';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 const UserProfilePage = () => {
   const params = useParams();
@@ -26,11 +29,51 @@ const UserProfilePage = () => {
     show: false,
   });
 
+  // 팔로우 모달 상태
+  const [followModal, setFollowModal] = useState<{
+    isOpen: boolean;
+    type: 'followers' | 'followees';
+  }>({
+    isOpen: false,
+    type: 'followers',
+  });
+
   // 탭 상태
   const [activeTab, setActiveTab] = useState<'reviewed' | 'created' | 'favorite'>('reviewed');
-  const [products, setProducts] = useState<ProductListItem[]>([]);
-  const [productsLoading, setProductsLoading] = useState(false);
-  const [productsError, setProductsError] = useState<string | null>(null);
+
+  // fetchFunction들을 useCallback으로 메모이제이션
+  const fetchReviewedProducts = useCallback(
+    (cursor: number | null) =>
+      getUserReviewedProducts(parseInt(userId), cursor ? { cursor } : undefined),
+    [userId],
+  );
+
+  const fetchCreatedProducts = useCallback(
+    (cursor: number | null) =>
+      getUserCreatedProducts(parseInt(userId), cursor ? { cursor } : undefined),
+    [userId],
+  );
+
+  const fetchFavoriteProducts = useCallback(
+    (cursor: number | null) =>
+      getUserFavoriteProducts(parseInt(userId), cursor ? { cursor } : undefined),
+    [userId],
+  );
+
+  // 무한스크롤 훅들
+  const reviewedProducts = useInfiniteScroll<ProductListItem>({
+    fetchFunction: fetchReviewedProducts,
+  });
+
+  const createdProducts = useInfiniteScroll<ProductListItem>({
+    fetchFunction: fetchCreatedProducts,
+  });
+
+  const favoriteProducts = useInfiniteScroll<ProductListItem>({
+    fetchFunction: fetchFavoriteProducts,
+  });
+
+  // 모든 탭이 무한스크롤을 사용하므로 기존 상태 제거
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -50,41 +93,26 @@ const UserProfilePage = () => {
     }
   }, [userId]);
 
-  // 상품 목록 fetch 함수
-  const fetchProducts = async (tab: 'reviewed' | 'created' | 'favorite') => {
-    if (!userId) return;
+  // 모든 탭이 무한스크롤을 사용하므로 기존 상품 로드 제거
 
-    try {
-      setProductsLoading(true);
-      setProductsError(null);
-      let data;
-
-      switch (tab) {
-        case 'reviewed':
-          data = await getUserReviewedProducts(parseInt(userId));
-          break;
-        case 'created':
-          data = await getUserCreatedProducts(parseInt(userId));
-          break;
-        case 'favorite':
-          data = await getUserFavoriteProducts(parseInt(userId));
-          break;
-      }
-
-      setProducts(data.list);
-    } catch (err) {
-      setProductsError(err instanceof Error ? err.message : 'Failed to load products');
-    } finally {
-      setProductsLoading(false);
-    }
-  };
-
-  // 탭 변경 시 상품 목록 다시 로드
+  // 무한스크롤 탭들 초기화
   useEffect(() => {
-    if (profile) {
-      fetchProducts(activeTab);
+    if (profile && activeTab === 'reviewed') {
+      reviewedProducts.reset();
     }
-  }, [activeTab, profile]);
+  }, [profile, activeTab]);
+
+  useEffect(() => {
+    if (profile && activeTab === 'created') {
+      createdProducts.reset();
+    }
+  }, [profile, activeTab]);
+
+  useEffect(() => {
+    if (profile && activeTab === 'favorite') {
+      favoriteProducts.reset();
+    }
+  }, [profile, activeTab]);
 
   const handleTabChange = (tab: 'reviewed' | 'created' | 'favorite') => {
     setActiveTab(tab);
@@ -126,6 +154,16 @@ const UserProfilePage = () => {
     }
   };
 
+  // 팔로우 모달 열기
+  const openFollowModal = (type: 'followers' | 'followees') => {
+    setFollowModal({ isOpen: true, type });
+  };
+
+  // 팔로우 모달 닫기
+  const closeFollowModal = () => {
+    setFollowModal({ isOpen: false, type: 'followers' });
+  };
+
   if (loading) {
     return (
       <div className='min-h-screen bg-[#0B0B0B] flex items-center justify-center'>
@@ -161,9 +199,13 @@ const UserProfilePage = () => {
                       className='w-full h-full object-cover'
                     />
                   ) : (
-                    <div className='w-full h-full flex items-center justify-center text-3xl'>
-                      👤
-                    </div>
+                    <Image
+                      src={NoProfileIcon}
+                      alt='기본 프로필'
+                      width={200}
+                      height={200}
+                      className='w-full h-full object-cover'
+                    />
                   )}
                 </div>
               </div>
@@ -178,12 +220,18 @@ const UserProfilePage = () => {
 
               {/* 팔로워/팔로잉 */}
               <div className='flex justify-center gap-12 mb-6 text-sm mt-auto'>
-                <div className='text-center'>
+                <div
+                  className='text-center cursor-pointer hover:opacity-80 transition-opacity'
+                  onClick={() => openFollowModal('followers')}
+                >
                   <div className='font-bold text-lg'>{profile.followersCount}</div>
                   <div className='text-[#9FA0A7]'>팔로워</div>
                 </div>
                 <div className='w-px h-12 bg-[#35353F] self-center'></div>
-                <div className='text-center'>
+                <div
+                  className='text-center cursor-pointer hover:opacity-80 transition-opacity'
+                  onClick={() => openFollowModal('followees')}
+                >
                   <div className='font-bold text-lg'>{profile.followeesCount}</div>
                   <div className='text-[#9FA0A7]'>팔로잉</div>
                 </div>
@@ -268,39 +316,186 @@ const UserProfilePage = () => {
             </div>
 
             {/* 상품 목록 내용 */}
-            <div>
-              {productsLoading && <div className='text-center text-[#9FA0A7] py-12'> </div>}
+            {activeTab === 'reviewed' ? (
+              /* 무한스크롤 적용된 reviewed 탭 */
+              <div
+                className='max-h-[600px] overflow-y-auto'
+                onScroll={reviewedProducts.handleScroll}
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#35353F #1C1C22',
+                }}
+              >
+                {/* 에러 상태 */}
+                {reviewedProducts.error && (
+                  <div className='text-center text-red-500 py-12'>{reviewedProducts.error}</div>
+                )}
 
-              {productsError && (
-                <div className='text-center text-red-500 py-12'>{productsError}</div>
-              )}
+                {/* 빈 상태 */}
+                {!reviewedProducts.isLoading &&
+                  !reviewedProducts.error &&
+                  reviewedProducts.items.length === 0 && (
+                    <div className='text-center text-[#9FA0A7] py-12'>
+                      리뷰를 남긴 상품이 없습니다.
+                    </div>
+                  )}
 
-              {!productsLoading && !productsError && products.length === 0 && (
-                <div className='text-center text-[#9FA0A7] py-12'>
-                  {activeTab === 'reviewed' && '리뷰를 남긴 상품이 없습니다.'}
-                  {activeTab === 'created' && '등록한 상품이 없습니다.'}
-                  {activeTab === 'favorite' && '찜한 상품이 없습니다.'}
-                </div>
-              )}
+                {/* 상품 목록 */}
+                {reviewedProducts.items.length > 0 && (
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-2'>
+                    {reviewedProducts.items.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={{
+                          id: product.id,
+                          name: product.name,
+                          image: product.image,
+                          rating: product.rating,
+                          reviewCount: product.reviewCount,
+                          favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
 
-              {!productsLoading && !productsError && products.length > 0 && (
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                  {products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        image: product.image,
-                        rating: product.rating,
-                        reviewCount: product.reviewCount,
-                        favoriteCount: product.favoriteCount,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+                {/* 로딩 상태 */}
+                {reviewedProducts.isLoading && (
+                  <div className='flex justify-center items-center py-8'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5097FA]'></div>
+                    <span className='ml-3 text-[#9FA0A7]'>상품을 불러오는 중...</span>
+                  </div>
+                )}
+
+                {/* 더 로드할 데이터가 없을 때 */}
+                {!reviewedProducts.hasMore &&
+                  reviewedProducts.items.length > 0 &&
+                  !reviewedProducts.isLoading && (
+                    <div className='text-center text-[#9FA0A7] py-8 text-sm'>
+                      모든 상품을 불러왔습니다.
+                    </div>
+                  )}
+              </div>
+            ) : activeTab === 'created' ? (
+              /* 무한스크롤 적용된 created 탭 */
+              <div
+                className='max-h-[600px] overflow-y-auto'
+                onScroll={createdProducts.handleScroll}
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#35353F #1C1C22',
+                }}
+              >
+                {/* 에러 상태 */}
+                {createdProducts.error && (
+                  <div className='text-center text-red-500 py-12'>{createdProducts.error}</div>
+                )}
+
+                {/* 빈 상태 */}
+                {!createdProducts.isLoading &&
+                  !createdProducts.error &&
+                  createdProducts.items.length === 0 && (
+                    <div className='text-center text-[#9FA0A7] py-12'>등록한 상품이 없습니다.</div>
+                  )}
+
+                {/* 상품 목록 */}
+                {createdProducts.items.length > 0 && (
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-2'>
+                    {createdProducts.items.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={{
+                          id: product.id,
+                          name: product.name,
+                          image: product.image,
+                          rating: product.rating,
+                          reviewCount: product.reviewCount,
+                          favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* 로딩 상태 */}
+                {createdProducts.isLoading && (
+                  <div className='flex justify-center items-center py-8'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5097FA]'></div>
+                    <span className='ml-3 text-[#9FA0A7]'>상품을 불러오는 중...</span>
+                  </div>
+                )}
+
+                {/* 더 로드할 데이터가 없을 때 */}
+                {!createdProducts.hasMore &&
+                  createdProducts.items.length > 0 &&
+                  !createdProducts.isLoading && (
+                    <div className='text-center text-[#9FA0A7] py-8 text-sm'>
+                      모든 상품을 불러왔습니다.
+                    </div>
+                  )}
+              </div>
+            ) : (
+              /* 무한스크롤 적용된 favorite 탭 */
+              <div
+                className='max-h-[600px] overflow-y-auto'
+                onScroll={favoriteProducts.handleScroll}
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#35353F #1C1C22',
+                }}
+              >
+                {/* 에러 상태 */}
+                {favoriteProducts.error && (
+                  <div className='text-center text-red-500 py-12'>{favoriteProducts.error}</div>
+                )}
+
+                {/* 빈 상태 */}
+                {!favoriteProducts.isLoading &&
+                  !favoriteProducts.error &&
+                  favoriteProducts.items.length === 0 && (
+                    <div className='text-center text-[#9FA0A7] py-12'>찜한 상품이 없습니다.</div>
+                  )}
+
+                {/* 상품 목록 */}
+                {favoriteProducts.items.length > 0 && (
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-2'>
+                    {favoriteProducts.items.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={{
+                          id: product.id,
+                          name: product.name,
+                          image: product.image,
+                          rating: product.rating,
+                          reviewCount: product.reviewCount,
+                          favoriteCount: product.favoriteCount,
+                          categoryId: product.categoryId,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* 로딩 상태 */}
+                {favoriteProducts.isLoading && (
+                  <div className='flex justify-center items-center py-8'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#5097FA]'></div>
+                    <span className='ml-3 text-[#9FA0A7]'>상품을 불러오는 중...</span>
+                  </div>
+                )}
+
+                {/* 더 로드할 데이터가 없을 때 */}
+                {!favoriteProducts.hasMore &&
+                  favoriteProducts.items.length > 0 &&
+                  !favoriteProducts.isLoading && (
+                    <div className='text-center text-[#9FA0A7] py-8 text-sm'>
+                      모든 상품을 불러왔습니다.
+                    </div>
+                  )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -311,6 +506,15 @@ const UserProfilePage = () => {
           {toast.message}
         </div>
       )}
+
+      {/* 팔로우 모달 */}
+      <FollowModal
+        isOpen={followModal.isOpen}
+        onClose={closeFollowModal}
+        userId={userId}
+        nickname={profile?.nickname || ''}
+        type={followModal.type}
+      />
     </div>
   );
 };
