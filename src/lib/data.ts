@@ -7,6 +7,7 @@ export const allProducts: Product[] = [
     reviewCount: 120,
     rating: 4.8,
     favoriteCount: 50,
+    categoryId: 1,
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ export const allProducts: Product[] = [
     reviewCount: 98,
     rating: 4.6,
     favoriteCount: 213,
+    categoryId: 2,
   },
   {
     id: 3,
@@ -23,6 +25,7 @@ export const allProducts: Product[] = [
     reviewCount: 250,
     rating: 4.9,
     favoriteCount: 800,
+    categoryId: 3,
   },
   {
     id: 4,
@@ -31,6 +34,7 @@ export const allProducts: Product[] = [
     reviewCount: 150,
     rating: 4.9,
     favoriteCount: 234,
+    categoryId: 4,
   },
   {
     id: 5,
@@ -39,6 +43,7 @@ export const allProducts: Product[] = [
     reviewCount: 60,
     rating: 4.4,
     favoriteCount: 120,
+    categoryId: 5,
   },
   {
     id: 6,
@@ -47,5 +52,6 @@ export const allProducts: Product[] = [
     reviewCount: 300,
     rating: 4.7,
     favoriteCount: 550,
+    categoryId: 6,
   },
 ];
