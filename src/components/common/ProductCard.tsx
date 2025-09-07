@@ -1,6 +1,6 @@
 import { Product } from '@/types/Product';
 import Image from 'next/image';
-import rilakkuma from './리락쿠마.jpg';
+import rilakkuma from './rirakkuma.jpg';
 
 interface ProductCardProps {
   product: Product;

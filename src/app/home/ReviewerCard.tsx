@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import rilakkuma from '@/components/common/리락쿠마.jpg';
+import rilakkuma from '@/components/common/rirakkuma.jpg';
 import { UserRanking } from '@/types/UserRanking';
 
 interface ReviewerCardProps extends UserRanking {
