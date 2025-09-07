@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import EyeIcon from '@/assets/icons/Eye.svg';
-import EyeOffIcon from '@/assets/icons/EyeOff.svg';
+import EyeOffIcon from '@/assets/icons/Eyeoff.svg';
 
 const inputVariants = cva(
   'flex w-full min-w-0 rounded-lg bg-[#252530] px-3 outline-none placeholder:text-muted-foreground text-[#F1F1F5] transition-[color,box-shadow]',
