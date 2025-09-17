@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import rilakkuma from '@/components/common/리락쿠마.JPG';
 import { UserRanking } from '@/types/UserRanking';
+import NoProfileIcon from '@/assets/images/no_profile.svg';
 
 interface ReviewerCardProps extends UserRanking {
   rank: number;
@@ -19,7 +19,7 @@ const ReviewerCard = ({ nickname, reviewCount, followersCount, rank }: ReviewerC
       {/* 프로필 이미지 */}
       <div className='relative w-9 h-9 aspect-square'>
         <div className='absolute inset-0 bg-zinc-300 rounded-full' />
-        <Image src={rilakkuma} alt={nickname} fill className='object-cover rounded-full' />
+        <Image src={NoProfileIcon} alt={nickname} fill className='object-cover rounded-full' />
       </div>
 
       {/* 정보 영역 */}
