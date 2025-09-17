@@ -15,6 +15,7 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import FollowModal from '@/components/user/FollowModal';
 import NoProfileIcon from '@/assets/images/no_profile.svg';
 import usePageInfiniteScroll from '@/hooks/usePageInfiniteScroll';
+import AddProductModal from '@/components/AddProudctModal';
 
 const UserProfilePage = () => {
   const params = useParams();
@@ -37,6 +38,9 @@ const UserProfilePage = () => {
     message: '',
     show: false,
   });
+
+  // 상품추가 모달 상태
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
 
   // 팔로우 모달 상태
   const [followModal, setFollowModal] = useState<{
@@ -564,6 +568,21 @@ const UserProfilePage = () => {
         nickname={profile?.nickname || ''}
         type={followModal.type}
       />
+
+      {/* 상품추가 모달 */}
+      <AddProductModal
+        isOpen={isAddProductModalOpen}
+        onClose={() => setIsAddProductModalOpen(false)}
+        currentNickName={profile?.nickname || ''}
+      />
+
+      {/* 상품추가 버튼 */}
+      <button
+        onClick={() => setIsAddProductModalOpen(true)}
+        className='fixed bottom-10 right-10 w-16 h-16 bg-gradient-to-r from-[#5097FA] to-[#5363FF] rounded-full flex items-center justify-center text-white text-4xl shadow-lg transition hover:brightness-110 active:scale-95 cursor-pointer'
+      >
+        <span className='relative bottom-0.5'>+</span>
+      </button>
     </div>
   );
 };

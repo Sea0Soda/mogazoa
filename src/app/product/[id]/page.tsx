@@ -54,7 +54,7 @@ export default function ProductPage() {
           <ProductInfo
             product={{
               id: product.id?.toString(),
-              category: `카테고리 ID: ${product.categoryId}`,
+              category: product.category?.name || '카테고리 없음',
               description: product.description ?? '',
               name: product.name,
               imageUrl: product.image,

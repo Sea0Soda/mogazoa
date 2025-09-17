@@ -94,7 +94,9 @@ const AddProductModal = ({ isOpen, onClose }: AddProductModalProps) => {
           {/* 헤더 */}
           <div className='flex justify-between items-center'>
             <h2 className='text-2xl font-semibold'>상품 추가</h2>
-            <button className=' text-gray-400 hover:text-gray-200'>X</button>
+            <button type='button' onClick={onClose} className=' text-gray-400 hover:text-gray-200'>
+              X
+            </button>
           </div>
 
           {/* 상품명 입력 */}

@@ -10,6 +10,14 @@ export interface Product {
   isFavorited?: boolean;
 }
 
+export interface ProductDetail extends Product {
+  writerId: number;
+  category: {
+    id: number;
+    name: string;
+  };
+}
+
 export interface ProductGridProps {
   title: string;
   products: Product[];

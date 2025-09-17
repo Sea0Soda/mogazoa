@@ -23,6 +23,7 @@ import NoProfileIcon from '@/assets/images/no_profile.svg';
 import usePageInfiniteScroll from '@/hooks/usePageInfiniteScroll';
 import ProfileEditModal from '@/components/mypage/ProfileEditModal';
 import useModal from '@/hooks/useModal';
+import AddProductModal from '@/components/AddProudctModal';
 
 const MyPage = () => {
   const router = useRouter();
@@ -38,6 +39,9 @@ const MyPage = () => {
 
   // 프로필 편집 모달
   const profileEditModal = useModal();
+
+  // 상품추가 모달 상태
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
 
   // 팔로우 모달 상태
   const [followModal, setFollowModal] = useState<{
@@ -567,6 +571,21 @@ const MyPage = () => {
         currentImage: profile?.image || null,
         onSave: handleSaveProfile,
       })}
+
+      {/* 상품추가 모달 */}
+      <AddProductModal
+        isOpen={isAddProductModalOpen}
+        onClose={() => setIsAddProductModalOpen(false)}
+        currentNickName={profile?.nickname || ''}
+      />
+
+      {/* 상품추가 버튼 */}
+      <button
+        onClick={() => setIsAddProductModalOpen(true)}
+        className='fixed bottom-10 right-10 w-16 h-16 bg-gradient-to-r from-[#5097FA] to-[#5363FF] rounded-full flex items-center justify-center text-white text-4xl shadow-lg transition hover:brightness-110 active:scale-95 cursor-pointer'
+      >
+        <span className='relative bottom-0.5'>+</span>
+      </button>
     </div>
   );
 };

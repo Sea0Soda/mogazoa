@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Product } from '@/types/Product';
-import { allProducts } from '@/lib/data';
+import { useGetProducts } from '@/api/categories/getProductList';
 
 export const ProductSearchInput: React.FC<{
   selectedProduct: Product | null;
@@ -12,6 +12,9 @@ export const ProductSearchInput: React.FC<{
   const [results, setResults] = useState<Product[]>([]);
   const [isActive, setIsActive] = useState(false);
 
+  // 실제 API에서 상품 목록 가져오기
+  const { data: productsData } = useGetProducts({ keyword: query.trim() || undefined });
+
   useEffect(() => {
     setQuery(selectedProduct?.name || '');
   }, [selectedProduct]);
@@ -21,15 +24,16 @@ export const ProductSearchInput: React.FC<{
       setIsActive(false);
       return;
     }
-    const timer = setTimeout(() => {
-      const filtered = allProducts.filter((p) =>
-        p.name.toLowerCase().includes(query.toLowerCase()),
-      );
-      setResults(filtered);
+
+    // API에서 받은 데이터 사용
+    if (productsData?.list) {
+      setResults(productsData.list.slice(0, 10)); // 최대 10개만 표시
       setIsActive(true);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [query, selectedProduct]);
+    } else {
+      setResults([]);
+      setIsActive(false);
+    }
+  }, [query, selectedProduct, productsData]);
 
   const handleSelect = (product: Product) => {
     onSelectProduct(product);
